@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.boco.dao.mapper.ConfigEntityMapper" >
+  <resultMap id="BaseResultMap" type="com.boco.dao.entity.ConfigEntity" >
+    <id column="CUID" property="cuid" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="VAL" property="val" jdbcType="VARCHAR" />
+    <result column="DES" property="des" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="STATE" property="state" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="DATE" />
+    <result column="MODIFY_TIME" property="modifyTime" jdbcType="DATE" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    CUID, NAME, VAL, DES, TYPE, STATE, CREATE_TIME, MODIFY_TIME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.boco.dao.entity.ConfigEntityExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from TAB_CONFIGS
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from TAB_CONFIGS
+    where CUID = #{cuid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from TAB_CONFIGS
+    where CUID = #{cuid,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.boco.dao.entity.ConfigEntityExample" >
+    delete from TAB_CONFIGS
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.boco.dao.entity.ConfigEntity" >
+    insert into TAB_CONFIGS (CUID, NAME, VAL, 
+      DES, TYPE, STATE, CREATE_TIME, 
+      MODIFY_TIME)
+    values (#{cuid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{val,jdbcType=VARCHAR}, 
+      #{des,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, #{createTime,jdbcType=DATE}, 
+      #{modifyTime,jdbcType=DATE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.boco.dao.entity.ConfigEntity" >
+    insert into TAB_CONFIGS
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="cuid != null" >
+        CUID,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="val != null" >
+        VAL,
+      </if>
+      <if test="des != null" >
+        DES,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="state != null" >
+        STATE,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="modifyTime != null" >
+        MODIFY_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="cuid != null" >
+        #{cuid,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="val != null" >
+        #{val,jdbcType=VARCHAR},
+      </if>
+      <if test="des != null" >
+        #{des,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=DATE},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.boco.dao.entity.ConfigEntityExample" resultType="java.lang.Integer" >
+    select count(*) from TAB_CONFIGS
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update TAB_CONFIGS
+    <set >
+      <if test="record.cuid != null" >
+        CUID = #{record.cuid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null" >
+        NAME = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.val != null" >
+        VAL = #{record.val,jdbcType=VARCHAR},
+      </if>
+      <if test="record.des != null" >
+        DES = #{record.des,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null" >
+        TYPE = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.state != null" >
+        STATE = #{record.state,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        CREATE_TIME = #{record.createTime,jdbcType=DATE},
+      </if>
+      <if test="record.modifyTime != null" >
+        MODIFY_TIME = #{record.modifyTime,jdbcType=DATE},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update TAB_CONFIGS
+    set CUID = #{record.cuid,jdbcType=VARCHAR},
+      NAME = #{record.name,jdbcType=VARCHAR},
+      VAL = #{record.val,jdbcType=VARCHAR},
+      DES = #{record.des,jdbcType=VARCHAR},
+      TYPE = #{record.type,jdbcType=VARCHAR},
+      STATE = #{record.state,jdbcType=VARCHAR},
+      CREATE_TIME = #{record.createTime,jdbcType=DATE},
+      MODIFY_TIME = #{record.modifyTime,jdbcType=DATE}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.boco.dao.entity.ConfigEntity" >
+    update TAB_CONFIGS
+    <set >
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="val != null" >
+        VAL = #{val,jdbcType=VARCHAR},
+      </if>
+      <if test="des != null" >
+        DES = #{des,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        STATE = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=DATE},
+      </if>
+      <if test="modifyTime != null" >
+        MODIFY_TIME = #{modifyTime,jdbcType=DATE},
+      </if>
+    </set>
+    where CUID = #{cuid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.boco.dao.entity.ConfigEntity" >
+    update TAB_CONFIGS
+    set NAME = #{name,jdbcType=VARCHAR},
+      VAL = #{val,jdbcType=VARCHAR},
+      DES = #{des,jdbcType=VARCHAR},
+      TYPE = #{type,jdbcType=VARCHAR},
+      STATE = #{state,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=DATE},
+      MODIFY_TIME = #{modifyTime,jdbcType=DATE}
+    where CUID = #{cuid,jdbcType=VARCHAR}
+  </update>
+</mapper>

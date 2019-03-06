@@ -2,14 +2,17 @@ package com.boco.config;
 
 import com.boco.Constant;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import com.boco.util.EncryptUtil;
 
 /**
  * 扩展spring配置文件类
@@ -20,9 +23,9 @@ import java.util.Properties;
 @Slf4j
 public class ExtPropertyPlaceholderConfigurer extends PropertyPlaceholderConfigurer {
 
-    private static Properties properties;
+    protected Properties properties;
 
-    private ConfigMonitor configMonitor;
+    protected ConfigMonitor configMonitor;
 
     public void setConfigMonitor(ConfigMonitor configMonitor){
         this.configMonitor = configMonitor;
@@ -54,11 +57,6 @@ public class ExtPropertyPlaceholderConfigurer extends PropertyPlaceholderConfigu
         super.postProcessBeanFactory(beanFactory);
     }
 
-    @Override
-    protected String convertProperty(String propertyName, String propertyValue) {
-        return super.convertProperty(propertyName, propertyValue);
-    }
-
     /**
      * 获取相关应用配置内容
      *
@@ -72,14 +70,14 @@ public class ExtPropertyPlaceholderConfigurer extends PropertyPlaceholderConfigu
         return properties.getProperty(key);
     }
 
-    public static Properties getProperties() {
-        return properties;
-    }
-
-    public static String removeConfig(String key) {
+    public String removeConfig(String key) {
         String oldVal = (String) properties.remove(key);
         log.debug("config value had del,the key is [{}],the  val is [{}]", key, oldVal);
         return oldVal;
+    }
+
+    public Properties getProperties(){
+        return properties;
     }
 
     /**
@@ -88,7 +86,7 @@ public class ExtPropertyPlaceholderConfigurer extends PropertyPlaceholderConfigu
      * @param key
      * @param val
      */
-    public static void updateConfig(String key, String val) {
+    public void updateConfig(String key, String val) {
         String oldVal = (String) properties.setProperty(key, val);
         log.debug("config had changed,the old val is [{}],the new val is [{}]", oldVal, val);
     }

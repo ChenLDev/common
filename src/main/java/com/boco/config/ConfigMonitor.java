@@ -20,10 +20,12 @@ public class ConfigMonitor implements Watcher {
     private ZooKeeper zk;
     private String host;
     private int timeout;
+    private ExtPropertyPlaceholderConfigurer configurer;
 
-    public ConfigMonitor(String host, int timeout) {
+    public ConfigMonitor(String host, int timeout, ExtPropertyPlaceholderConfigurer configurer) {
         this.host = host;
         this.timeout = timeout;
+        this.configurer = configurer;
         try {
             this.zk = new ZooKeeper(host, timeout, this);
         } catch (IOException e) {
@@ -77,7 +79,7 @@ public class ConfigMonitor implements Watcher {
         try {
             String dataVal = new String(zk.getData(pathKey, this, null));
             pathKey = prefixFilter(pathKey);
-            ExtPropertyPlaceholderConfigurer.updateConfig(pathKey, dataVal);
+            configurer.updateConfig(pathKey, dataVal);
             log.debug("the pathKey [{}],the val[{}]", pathKey, dataVal);
         } catch (KeeperException e) {
             e.printStackTrace();
@@ -94,9 +96,9 @@ public class ConfigMonitor implements Watcher {
             List<String> children = zk.getChildren(Constant.ROOT_SEPARATOR, this);
             for (String childrenPath : children) {
                 byte[] data = zk.getData(addSeparatorPreFix(childrenPath), this, null);
-                ExtPropertyPlaceholderConfigurer.updateConfig(childrenPath, new String(data));
+                configurer.updateConfig(childrenPath, new String(data));
             }
-            log.debug("configMap data is [{}]", ExtPropertyPlaceholderConfigurer.getProperties());
+            log.debug("configMap data is [{}]", configurer.getProperties());
         } catch (KeeperException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -148,7 +150,7 @@ public class ConfigMonitor implements Watcher {
         String delKey = prefixFilter(watchedEvent.getPath());
         log.debug("delConfig the event [{}],the deleted pathKey is[{}]",
                 watchedEvent.getType(), delKey);
-        ExtPropertyPlaceholderConfigurer.removeConfig(delKey);
+        configurer.removeConfig(delKey);
     }
 
     /**
